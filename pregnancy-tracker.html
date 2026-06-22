@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Our Pregnancy Journey</title>
+  <style>
+/* ── Reset & Base ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --pink:      #f48fb1;
+  --pink-dark: #e91e8c;
+  --pink-light:#fce4ec;
+  --rose:      #f06292;
+  --cream:     #fff8f9;
+  --white:     #ffffff;
+  --text:      #3d2c35;
+  --text-muted:#8e7888;
+  --border:    #f8d7e3;
+  --shadow:    rgba(244,143,177,.18);
+  --radius:    16px;
+  --radius-sm: 10px;
+}
+
+body {
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  background: var(--cream);
+  color: var(--text);
+  min-height: 100vh;
+}
+
+.hidden { display: none !important; }
+.screen { min-height: 100vh; }
+
+/* ── Setup Screen ── */
+#setup-screen {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: linear-gradient(135deg, #fce4ec 0%, #ffd6e7 50%, #f8bbd0 100%);
+}
+
+.setup-card {
+  background: var(--white);
+  border-radius: 24px;
+  padding: 40px 36px;
+  width: 100%;
+  max-width: 440px;
+  box-shadow: 0 8px 40px var(--shadow);
+  text-align: center;
+}
+
+.heart-icon {
+  font-size: 48px;
+  color: var(--pink-dark);
+  margin-bottom: 12px;
+  animation: heartbeat 1.4s ease infinite;
+}
+
+@keyframes heartbeat {
+  0%, 100% { transform: scale(1); }
+  14%       { transform: scale(1.15); }
+  28%       { transform: scale(1); }
+  42%       { transform: scale(1.1); }
+}
+
+.setup-card h1 { font-size: 26px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+.subtitle { color: var(--text-muted); margin-bottom: 28px; font-size: 15px; }
+
+.form-group { text-align: left; margin-bottom: 18px; }
+
+.form-group label {
+  display: block; font-size: 13px; font-weight: 600; color: var(--text-muted);
+  text-transform: uppercase; letter-spacing: .5px; margin-bottom: 6px;
+}
+
+.form-group input, .form-group textarea {
+  width: 100%; padding: 12px 14px; border: 2px solid var(--border);
+  border-radius: var(--radius-sm); font-size: 15px; color: var(--text);
+  background: var(--white); transition: border-color .2s; outline: none;
+}
+.form-group input:focus, .form-group textarea:focus { border-color: var(--pink); }
+
+.hint { font-size: 12px; color: var(--text-muted); margin-bottom: 20px; margin-top: -10px; }
+
+/* ── Buttons ── */
+.btn-primary {
+  display: inline-block; width: 100%; padding: 14px;
+  background: linear-gradient(135deg, var(--rose) 0%, var(--pink-dark) 100%);
+  color: #fff; border: none; border-radius: var(--radius-sm);
+  font-size: 16px; font-weight: 600; cursor: pointer; transition: opacity .2s, transform .1s;
+}
+.btn-primary:hover  { opacity: .92; }
+.btn-primary:active { transform: scale(.98); }
+
+.btn-secondary {
+  padding: 12px 20px; background: var(--border); color: var(--text);
+  border: none; border-radius: var(--radius-sm); font-size: 15px; font-weight: 600; cursor: pointer;
+}
+
+.btn-danger {
+  display: block; width: 100%; margin-top: 16px; padding: 10px;
+  background: none; border: 1px solid #f8bbd0; border-radius: var(--radius-sm);
+  color: #c62828; font-size: 13px; cursor: pointer;
+}
+.btn-danger:hover { background: #ffebee; }
+
+/* ── Header ── */
+header { background: var(--white); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 10; }
+
+.header-content {
+  max-width: 640px; margin: 0 auto; padding: 16px 20px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+
+.header-left { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 17px; }
+
+.heart-small { color: var(--pink-dark); font-size: 18px; animation: heartbeat 1.4s ease infinite; }
+
+.btn-settings {
+  background: none; border: none; font-size: 20px; cursor: pointer;
+  color: var(--text-muted); padding: 4px 8px; border-radius: 8px; transition: background .2s;
+}
+.btn-settings:hover { background: var(--pink-light); }
+
+/* ── Main ── */
+main {
+  max-width: 640px; margin: 0 auto; padding: 20px 16px 60px;
+  display: flex; flex-direction: column; gap: 20px;
+}
+
+/* ── Progress Banner ── */
+.progress-banner {
+  background: linear-gradient(135deg, var(--rose) 0%, var(--pink-dark) 100%);
+  border-radius: 20px; padding: 28px 24px;
+  display: flex; align-items: center; justify-content: center; gap: 24px;
+  color: #fff; position: relative; overflow: hidden;
+}
+.progress-banner::before {
+  content: '♥'; position: absolute; right: 20px; top: 50%; transform: translateY(-50%);
+  font-size: 80px; opacity: .12;
+}
+
+.week-display, .day-display { text-align: center; }
+.week-number, .day-number { font-size: 52px; font-weight: 800; line-height: 1; }
+.week-label, .day-label { font-size: 14px; opacity: .85; font-weight: 500; text-transform: uppercase; letter-spacing: .5px; }
+
+.trimester-badge {
+  position: absolute; top: 14px; right: 16px;
+  background: rgba(255,255,255,.25); border: 1px solid rgba(255,255,255,.4);
+  border-radius: 20px; padding: 4px 12px; font-size: 12px; font-weight: 600; color: #fff;
+}
+
+/* ── Progress Bar ── */
+.progress-section { background: var(--white); border-radius: var(--radius); padding: 18px 20px; box-shadow: 0 2px 12px var(--shadow); }
+.progress-track { height: 10px; background: var(--pink-light); border-radius: 99px; overflow: hidden; margin-bottom: 8px; }
+.progress-fill { height: 100%; background: linear-gradient(90deg, var(--rose), var(--pink-dark)); border-radius: 99px; transition: width 1s ease; width: 0%; }
+.progress-labels { display: flex; justify-content: space-between; font-size: 12px; color: var(--text-muted); }
+
+/* ── Dates Row ── */
+.dates-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.date-card { background: var(--white); border-radius: var(--radius); padding: 16px 12px; text-align: center; box-shadow: 0 2px 12px var(--shadow); }
+.date-card-label { font-size: 11px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 6px; }
+.date-card-value { font-size: 15px; font-weight: 700; color: var(--text); }
+
+/* ── Milestone Card ── */
+.milestone-card {
+  background: var(--white); border-radius: var(--radius); padding: 20px;
+  display: flex; align-items: flex-start; gap: 16px;
+  box-shadow: 0 2px 12px var(--shadow); border-left: 4px solid var(--pink);
+}
+.milestone-emoji { font-size: 36px; flex-shrink: 0; }
+.milestone-content h3 { font-size: 15px; font-weight: 700; margin-bottom: 4px; color: var(--pink-dark); }
+.milestone-content p { font-size: 14px; color: var(--text-muted); line-height: 1.6; }
+
+/* ── Check-in Section ── */
+.checkin-section { background: var(--white); border-radius: var(--radius); padding: 24px 20px; box-shadow: 0 2px 12px var(--shadow); }
+.checkin-section h2 { font-size: 19px; font-weight: 700; margin-bottom: 4px; }
+.checkin-sub { font-size: 13px; color: var(--text-muted); margin-bottom: 18px; }
+
+/* Mood Grid */
+.mood-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px; }
+.mood-btn {
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  padding: 12px 8px; background: var(--cream); border: 2px solid transparent;
+  border-radius: var(--radius-sm); cursor: pointer; transition: all .2s;
+  font-size: 13px; font-weight: 500; color: var(--text);
+}
+.mood-btn:hover { background: var(--pink-light); border-color: var(--pink); }
+.mood-btn.selected { background: var(--pink-light); border-color: var(--pink-dark); color: var(--pink-dark); font-weight: 700; }
+.mood-emoji { font-size: 26px; }
+
+/* Symptoms */
+.symptom-section { margin-bottom: 18px; }
+.symptom-label { display: block; font-size: 13px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 10px; }
+.symptom-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { padding: 7px 14px; background: var(--cream); border: 1.5px solid var(--border); border-radius: 99px; font-size: 13px; cursor: pointer; transition: all .2s; color: var(--text); }
+.chip:hover { border-color: var(--pink); }
+.chip.active { background: var(--pink-light); border-color: var(--pink-dark); color: var(--pink-dark); font-weight: 600; }
+
+/* Notes */
+.notes-section { margin-bottom: 18px; }
+.notes-section label { display: block; font-size: 13px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 8px; }
+.notes-section textarea { width: 100%; padding: 12px 14px; border: 2px solid var(--border); border-radius: var(--radius-sm); font-size: 14px; color: var(--text); resize: vertical; font-family: inherit; outline: none; transition: border-color .2s; }
+.notes-section textarea:focus { border-color: var(--pink); }
+
+.btn-save { margin-top: 4px; }
+.save-feedback { text-align: center; color: #388e3c; font-weight: 600; font-size: 14px; margin-top: 10px; animation: fadeIn .3s ease; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
+
+/* ── History ── */
+.history-section { background: var(--white); border-radius: var(--radius); padding: 24px 20px; box-shadow: 0 2px 12px var(--shadow); }
+.history-section h2 { font-size: 19px; font-weight: 700; margin-bottom: 16px; }
+.history-list { display: flex; flex-direction: column; gap: 14px; }
+.empty-state { color: var(--text-muted); font-size: 14px; text-align: center; padding: 20px 0; }
+.history-entry { border: 1.5px solid var(--border); border-radius: var(--radius-sm); padding: 14px 16px; background: var(--cream); }
+.history-entry-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
+.entry-date { font-size: 13px; font-weight: 700; color: var(--text-muted); }
+.entry-week { font-size: 12px; background: var(--pink-light); color: var(--pink-dark); padding: 2px 8px; border-radius: 99px; font-weight: 600; }
+.entry-mood { font-size: 15px; font-weight: 600; margin-bottom: 6px; display: flex; align-items: center; gap: 6px; }
+.entry-symptoms { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 6px; }
+.entry-symptom-chip { font-size: 11px; background: var(--border); color: var(--text-muted); padding: 2px 8px; border-radius: 99px; }
+.entry-notes { font-size: 13px; color: var(--text); line-height: 1.5; font-style: italic; }
+
+/* ── Settings Modal ── */
+.modal { position: fixed; inset: 0; background: rgba(0,0,0,.4); z-index: 100; display: flex; align-items: center; justify-content: center; padding: 20px; }
+.modal-card { background: var(--white); border-radius: 20px; padding: 32px 28px; width: 100%; max-width: 420px; box-shadow: 0 8px 40px rgba(0,0,0,.2); }
+.modal-card h2 { font-size: 20px; font-weight: 700; margin-bottom: 20px; }
+.modal-actions { display: flex; gap: 10px; margin-top: 8px; }
+.modal-actions .btn-primary { flex: 1; width: auto; }
+
+@media (max-width: 400px) {
+  .progress-banner { padding: 22px 16px; }
+  .week-number, .day-number { font-size: 44px; }
+  .mood-grid { grid-template-columns: repeat(2, 1fr); }
+  .date-card-value { font-size: 13px; }
+}
+  </style>
+</head>
+<body>
+<div id="app">
+
+  <!-- Setup Screen -->
+  <div id="setup-screen" class="screen hidden">
+    <div class="setup-card">
+      <div class="heart-icon">♥</div>
+      <h1>Our Pregnancy Journey</h1>
+      <p class="subtitle">Let's set up your tracker</p>
+      <div class="form-group">
+        <label>First day of last menstrual period (LMP)</label>
+        <input type="date" id="lmp-input" />
+      </div>
+      <div class="form-group">
+        <label>Or enter your due date</label>
+        <input type="date" id="due-date-input" />
+      </div>
+      <p class="hint">Fill in one — we'll calculate the other automatically.</p>
+      <div class="form-group">
+        <label>Mom's name</label>
+        <input type="text" id="mom-name-input" placeholder="e.g. Sarah" />
+      </div>
+      <button class="btn-primary" onclick="saveSetup()">Start Our Journey ♥</button>
+    </div>
+  </div>
+
+  <!-- Main Dashboard -->
+  <div id="dashboard" class="screen hidden">
+    <header>
+      <div class="header-content">
+        <div class="header-left">
+          <span class="heart-small">♥</span>
+          <span id="header-name">Our Pregnancy Journey</span>
+        </div>
+        <button class="btn-settings" onclick="showSettings()" title="Settings">⚙</button>
+      </div>
+    </header>
+
+    <main>
+      <section class="progress-banner">
+        <div class="week-display">
+          <div class="week-number" id="week-number">0</div>
+          <div class="week-label">weeks</div>
+        </div>
+        <div class="day-display">
+          <div class="day-number" id="day-number">0</div>
+          <div class="day-label">days</div>
+        </div>
+        <div class="trimester-badge" id="trimester-badge">1st Trimester</div>
+      </section>
+
+      <section class="progress-section">
+        <div class="progress-track">
+          <div class="progress-fill" id="progress-fill"></div>
+        </div>
+        <div class="progress-labels">
+          <span>Week 1</span>
+          <span id="days-remaining"></span>
+          <span>Week 40</span>
+        </div>
+      </section>
+
+      <section class="dates-row">
+        <div class="date-card">
+          <div class="date-card-label">Due Date</div>
+          <div class="date-card-value" id="due-date-display">—</div>
+        </div>
+        <div class="date-card">
+          <div class="date-card-label">Days Along</div>
+          <div class="date-card-value" id="days-along">—</div>
+        </div>
+        <div class="date-card">
+          <div class="date-card-label">Days Left</div>
+          <div class="date-card-value" id="days-left">—</div>
+        </div>
+      </section>
+
+      <section class="milestone-card">
+        <div class="milestone-emoji" id="milestone-emoji">🌱</div>
+        <div class="milestone-content">
+          <h3 id="milestone-title">This week</h3>
+          <p id="milestone-text">Loading milestone…</p>
+        </div>
+      </section>
+
+      <section class="checkin-section">
+        <h2>How are you feeling today?</h2>
+        <p class="checkin-sub" id="checkin-date-label">Log today's wellness</p>
+
+        <div class="mood-grid">
+          <button class="mood-btn" data-mood="great" onclick="selectMood(this)"><span class="mood-emoji">😄</span><span>Great</span></button>
+          <button class="mood-btn" data-mood="good" onclick="selectMood(this)"><span class="mood-emoji">🙂</span><span>Good</span></button>
+          <button class="mood-btn" data-mood="okay" onclick="selectMood(this)"><span class="mood-emoji">😐</span><span>Okay</span></button>
+          <button class="mood-btn" data-mood="tired" onclick="selectMood(this)"><span class="mood-emoji">😴</span><span>Tired</span></button>
+          <button class="mood-btn" data-mood="nauseous" onclick="selectMood(this)"><span class="mood-emoji">🤢</span><span>Nauseous</span></button>
+          <button class="mood-btn" data-mood="rough" onclick="selectMood(this)"><span class="mood-emoji">😞</span><span>Rough Day</span></button>
+        </div>
+
+        <div class="symptom-section">
+          <label class="symptom-label">Any symptoms today? (select all that apply)</label>
+          <div class="symptom-chips">
+            <button class="chip" onclick="toggleChip(this)">Morning sickness</button>
+            <button class="chip" onclick="toggleChip(this)">Fatigue</button>
+            <button class="chip" onclick="toggleChip(this)">Heartburn</button>
+            <button class="chip" onclick="toggleChip(this)">Back pain</button>
+            <button class="chip" onclick="toggleChip(this)">Cravings</button>
+            <button class="chip" onclick="toggleChip(this)">Headache</button>
+            <button class="chip" onclick="toggleChip(this)">Swelling</button>
+            <button class="chip" onclick="toggleChip(this)">Insomnia</button>
+            <button class="chip" onclick="toggleChip(this)">Kicks felt</button>
+            <button class="chip" onclick="toggleChip(this)">Braxton Hicks</button>
+          </div>
+        </div>
+
+        <div class="notes-section">
+          <label for="notes-input">Notes / thoughts for today</label>
+          <textarea id="notes-input" placeholder="How was your day? Any moments worth remembering…" rows="3"></textarea>
+        </div>
+
+        <button class="btn-primary btn-save" onclick="saveCheckin()">Save Today's Entry ♥</button>
+        <div id="save-feedback" class="save-feedback hidden">Entry saved! ✓</div>
+      </section>
+
+      <section class="history-section">
+        <h2>Wellness Journal</h2>
+        <div id="history-list" class="history-list">
+          <p class="empty-state">No entries yet — start logging today!</p>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Settings Modal -->
+  <div id="settings-modal" class="modal hidden">
+    <div class="modal-card">
+      <h2>Settings</h2>
+      <div class="form-group">
+        <label>Mom's name</label>
+        <input type="text" id="settings-mom-name" />
+      </div>
+      <div class="form-group">
+        <label>First day of LMP</label>
+        <input type="date" id="settings-lmp" />
+      </div>
+      <div class="form-group">
+        <label>Due date</label>
+        <input type="date" id="settings-due" />
+      </div>
+      <div class="modal-actions">
+        <button class="btn-secondary" onclick="closeSettings()">Cancel</button>
+        <button class="btn-primary" onclick="saveSettings()">Save Changes</button>
+      </div>
+      <button class="btn-danger" onclick="resetApp()">Reset All Data</button>
+    </div>
+  </div>
+
+</div>
+<script>
+'use strict';
+
+const STORE = {
+  get: k => { try { return JSON.parse(localStorage.getItem(k)); } catch { return null; } },
+  set: (k, v) => localStorage.setItem(k, JSON.stringify(v)),
+  del: k => localStorage.removeItem(k),
+};
+
+const MILESTONES = {
+  4:  { emoji: '🌱', title: 'Week 4 – Implantation', text: 'The fertilised egg has nestled into the uterine lining. The placenta and amniotic sac are beginning to form.' },
+  5:  { emoji: '🫀', title: 'Week 5 – Heart forming', text: 'The neural tube (future brain & spinal cord) is developing. A tiny heart has started beating!' },
+  6:  { emoji: '💗', title: 'Week 6 – Heartbeat', text: 'Baby\'s heart is beating about 110 times per minute. Tiny arm and leg buds are visible.' },
+  7:  { emoji: '🧠', title: 'Week 7 – Brain growth', text: 'Baby\'s brain is growing rapidly. Facial features — eyes, nostrils and ears — are taking shape.' },
+  8:  { emoji: '🫘', title: 'Week 8 – Bean-sized', text: 'Baby is about the size of a kidney bean. Fingers and toes are beginning to separate.' },
+  9:  { emoji: '🍇', title: 'Week 9 – Grape-sized', text: 'All essential organs are in place. Baby can make small movements, though you can\'t feel them yet.' },
+  10: { emoji: '🍓', title: 'Week 10 – Strawberry', text: 'Baby is now officially called a fetus. Tiny bones are starting to harden.' },
+  11: { emoji: '🫒', title: 'Week 11 – Olive-sized', text: 'Baby\'s organs are fully formed and growing. Fingers and toes are no longer webbed.' },
+  12: { emoji: '🍋', title: 'Week 12 – Lemon', text: 'End of first trimester! Risk of miscarriage drops significantly. Baby can open and close fists.' },
+  13: { emoji: '🍑', title: 'Week 13 – Peach', text: 'Welcome to the second trimester! Fingerprints are forming on baby\'s tiny fingertips.' },
+  14: { emoji: '🍊', title: 'Week 14 – Navel orange', text: 'Baby can squint, frown and grimace. The kidneys are producing urine.' },
+  15: { emoji: '🍏', title: 'Week 15 – Apple', text: 'Baby is forming taste buds. You may start to feel the first flutters of movement (quickening).' },
+  16: { emoji: '🥑', title: 'Week 16 – Avocado', text: 'Baby\'s ears are developed enough to hear your voice. The backbone and muscles are strengthening.' },
+  17: { emoji: '🍐', title: 'Week 17 – Pear', text: 'Baby is putting on fat deposits to keep warm. Sweat glands are forming.' },
+  18: { emoji: '🥭', title: 'Week 18 – Mango', text: 'This is a common week for the anatomy ultrasound! Baby\'s nervous system is maturing rapidly.' },
+  19: { emoji: '🫑', title: 'Week 19 – Heirloom tomato', text: 'Baby is developing a waxy protective coating called vernix. You may feel kicks more regularly now.' },
+  20: { emoji: '🍌', title: 'Week 20 – Banana', text: 'Halfway there! Baby can hear sounds from outside the womb. Their senses are developing quickly.' },
+  21: { emoji: '🥕', title: 'Week 21 – Carrot', text: 'Baby\'s digestive system is practicing swallowing amniotic fluid. You\'ll feel stronger kicks soon.' },
+  22: { emoji: '🌽', title: 'Week 22 – Corn on the cob', text: 'Baby\'s lips and eyebrows are distinct. They may suck their thumb in there.' },
+  23: { emoji: '🍆', title: 'Week 23 – Eggplant', text: 'Baby is gaining weight steadily. Their skin is still somewhat transparent but filling out.' },
+  24: { emoji: '🌽', title: 'Week 24 – Ear of corn', text: 'Baby reaches a major viability milestone. Lungs are developing the surfactant needed to breathe.' },
+  25: { emoji: '🥦', title: 'Week 25 – Cauliflower', text: 'Baby responds to touch and may startle at loud sounds. Hair, eyebrows and eyelashes are present.' },
+  26: { emoji: '🥬', title: 'Week 26 – Kale', text: 'Baby\'s eyes are forming and will soon open. Brain activity is increasing rapidly.' },
+  27: { emoji: '🥒', title: 'Week 27 – Cucumber', text: 'End of second trimester approaching! Baby sleeps and wakes in regular cycles.' },
+  28: { emoji: '🫛', title: 'Week 28 – Start of 3rd Trimester', text: 'Third trimester begins! Baby can blink and has eyelashes. Brain is forming grooves and indentations.' },
+  29: { emoji: '🍠', title: 'Week 29 – Butternut squash', text: 'Baby is kicking and stretching regularly. Muscles and lungs are maturing for life outside.' },
+  30: { emoji: '🎃', title: 'Week 30 – Cabbage', text: 'Baby is about 15 inches long. They\'re storing fat and the lanugo (fine hair) is starting to disappear.' },
+  31: { emoji: '🥥', title: 'Week 31 – Coconut', text: 'Baby\'s brain and nerves are directing all bodily functions. They\'re practicing breathing movements.' },
+  32: { emoji: '🫐', title: 'Week 32 – Jicama', text: 'Baby has toenails, fingernails and real hair! They\'re head-down in most cases now.' },
+  33: { emoji: '🍍', title: 'Week 33 – Pineapple', text: 'Baby\'s bones are hardening (except the skull, which stays soft for delivery). Their immune system is developing.' },
+  34: { emoji: '🎾', title: 'Week 34 – Cantaloupe', text: 'Baby is considered "late preterm." The central nervous system and lungs are nearly mature.' },
+  35: { emoji: '🏈', title: 'Week 35 – Honeydew', text: 'Most of the development is complete. Baby is gaining about half a pound per week now.' },
+  36: { emoji: '🥗', title: 'Week 36 – Head of lettuce', text: 'Baby may "drop" into the pelvis (lightening). You might breathe easier but feel more pressure below.' },
+  37: { emoji: '✅', title: 'Week 37 – Full term!', text: 'Baby is considered early term. They\'re likely in position for birth. Final organ systems are maturing.' },
+  38: { emoji: '🌟', title: 'Week 38 – Watermelon', text: 'Baby is fully developed and ready to meet you! Most of the vernix has disappeared.' },
+  39: { emoji: '💫', title: 'Week 39 – Almost!', text: 'Brain is still rapidly developing. Baby could arrive any day — watch for signs of labor!' },
+  40: { emoji: '🎉', title: 'Week 40 – Due week!', text: 'You\'ve made it to your due date! Every day is a waiting game now. Baby will arrive on their own schedule.' },
+};
+
+function getMilestone(week) {
+  if (week < 4) return { emoji: '🤰', title: 'Very early days', text: 'You\'re in the earliest days of pregnancy. The journey is just beginning!' };
+  if (week > 40) return { emoji: '👶', title: 'Past due date', text: 'You\'ve passed your due date — baby is taking their time! Stay in close contact with your care team.' };
+  for (let w = week; w >= 4; w--) {
+    if (MILESTONES[w]) return MILESTONES[w];
+  }
+  return { emoji: '🌱', title: `Week ${week}`, text: 'Growing and thriving!' };
+}
+
+function today() { const d = new Date(); d.setHours(0,0,0,0); return d; }
+
+function parseDate(str) {
+  if (!str) return null;
+  const [y,m,d] = str.split('-').map(Number);
+  return new Date(y, m-1, d);
+}
+
+function formatDate(date) {
+  if (!date) return '—';
+  return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+}
+
+function formatDateKey(date) {
+  const y = date.getFullYear();
+  const m = String(date.getMonth()+1).padStart(2,'0');
+  const d = String(date.getDate()).padStart(2,'0');
+  return `${y}-${m}-${d}`;
+}
+
+function lmpFromDue(dueDate) { const d = new Date(dueDate); d.setDate(d.getDate()-280); return d; }
+function dueFromLmp(lmpDate) { const d = new Date(lmpDate); d.setDate(d.getDate()+280); return d; }
+
+function calcPregnancy(lmpDate) {
+  const now = today();
+  const totalDays = Math.floor((now - lmpDate) / 86400000);
+  const week = Math.floor(totalDays / 7);
+  const dayOfWeek = totalDays % 7;
+  const dueDate = dueFromLmp(lmpDate);
+  const daysLeft = Math.max(0, Math.floor((dueDate - now) / 86400000));
+  const progress = Math.min(100, Math.max(0, (totalDays / 280) * 100));
+  return { week, dayOfWeek, totalDays, daysLeft, dueDate, progress };
+}
+
+function trimesterLabel(week) {
+  if (week < 14) return '1st Trimester';
+  if (week < 28) return '2nd Trimester';
+  return '3rd Trimester';
+}
+
+let selectedMood = null;
+function getConfig()   { return STORE.get('pg_config'); }
+function getCheckins() { return STORE.get('pg_checkins') || {}; }
+
+document.addEventListener('DOMContentLoaded', () => {
+  const cfg = getConfig();
+  if (!cfg || !cfg.lmp) {
+    showScreen('setup-screen');
+    document.getElementById('lmp-input').max = formatDateKey(today());
+    document.getElementById('lmp-input').addEventListener('change', e => {
+      if (e.target.value) document.getElementById('due-date-input').value = formatDateKey(dueFromLmp(parseDate(e.target.value)));
+    });
+    document.getElementById('due-date-input').addEventListener('change', e => {
+      if (e.target.value) document.getElementById('lmp-input').value = formatDateKey(lmpFromDue(parseDate(e.target.value)));
+    });
+  } else {
+    showDashboard(cfg);
+  }
+});
+
+function showScreen(id) {
+  ['setup-screen','dashboard'].forEach(s => { const el = document.getElementById(s); if (el) el.classList.add('hidden'); });
+  document.getElementById(id).classList.remove('hidden');
+}
+
+function saveSetup() {
+  const lmpVal = document.getElementById('lmp-input').value;
+  const dueVal = document.getElementById('due-date-input').value;
+  const name   = document.getElementById('mom-name-input').value.trim();
+  if (!lmpVal && !dueVal) { alert('Please enter either your LMP or due date to continue.'); return; }
+  const lmpDate = lmpVal ? parseDate(lmpVal) : lmpFromDue(parseDate(dueVal));
+  const cfg = { lmp: formatDateKey(lmpDate), name: name || 'Mama' };
+  STORE.set('pg_config', cfg);
+  showDashboard(cfg);
+}
+
+function showDashboard(cfg) {
+  showScreen('dashboard');
+  const lmpDate = parseDate(cfg.lmp);
+  const { week, dayOfWeek, totalDays, daysLeft, dueDate, progress } = calcPregnancy(lmpDate);
+
+  document.getElementById('header-name').textContent = cfg.name ? `${cfg.name}'s Journey` : 'Our Pregnancy Journey';
+  document.getElementById('week-number').textContent = week;
+  document.getElementById('day-number').textContent  = dayOfWeek;
+  document.getElementById('trimester-badge').textContent = trimesterLabel(week);
+  document.getElementById('progress-fill').style.width = `${progress.toFixed(1)}%`;
+  document.getElementById('days-remaining').textContent = `${Math.round(progress)}% complete`;
+  document.getElementById('due-date-display').textContent = formatDate(dueDate);
+  document.getElementById('days-along').textContent = `${totalDays}`;
+  document.getElementById('days-left').textContent  = daysLeft > 0 ? `${daysLeft}` : 'Here! 🎉';
+
+  const ms = getMilestone(week);
+  document.getElementById('milestone-emoji').textContent = ms.emoji;
+  document.getElementById('milestone-title').textContent = ms.title;
+  document.getElementById('milestone-text').textContent  = ms.text;
+
+  document.getElementById('checkin-date-label').textContent =
+    `Logging for ${today().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })} · Week ${week}, Day ${dayOfWeek}`;
+
+  const checkins = getCheckins();
+  const todayStr = formatDateKey(today());
+  if (checkins[todayStr]) prefillCheckin(checkins[todayStr]);
+  renderHistory();
+}
+
+function prefillCheckin(entry) {
+  if (entry.mood) {
+    const btn = document.querySelector(`.mood-btn[data-mood="${entry.mood}"]`);
+    if (btn) { selectedMood = entry.mood; btn.classList.add('selected'); }
+  }
+  (entry.symptoms || []).forEach(sym => {
+    document.querySelectorAll('.chip').forEach(c => { if (c.textContent.trim() === sym) c.classList.add('active'); });
+  });
+  if (entry.notes) document.getElementById('notes-input').value = entry.notes;
+}
+
+function selectMood(btn) {
+  document.querySelectorAll('.mood-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  selectedMood = btn.dataset.mood;
+}
+
+function toggleChip(chip) { chip.classList.toggle('active'); }
+
+function saveCheckin() {
+  if (!selectedMood) { alert('Please select how you\'re feeling before saving.'); return; }
+  const cfg = getConfig();
+  const { week, dayOfWeek } = calcPregnancy(parseDate(cfg.lmp));
+  const todayStr = formatDateKey(today());
+  const symptoms = [];
+  document.querySelectorAll('.chip.active').forEach(c => symptoms.push(c.textContent.trim()));
+  const entry = { date: todayStr, week, dayOfWeek, mood: selectedMood, symptoms, notes: document.getElementById('notes-input').value.trim() };
+  const checkins = getCheckins();
+  checkins[todayStr] = entry;
+  STORE.set('pg_checkins', checkins);
+  const fb = document.getElementById('save-feedback');
+  fb.classList.remove('hidden');
+  setTimeout(() => fb.classList.add('hidden'), 3000);
+  renderHistory();
+}
+
+const MOOD_DISPLAY = {
+  great:    { emoji: '😄', label: 'Great' },
+  good:     { emoji: '🙂', label: 'Good' },
+  okay:     { emoji: '😐', label: 'Okay' },
+  tired:    { emoji: '😴', label: 'Tired' },
+  nauseous: { emoji: '🤢', label: 'Nauseous' },
+  rough:    { emoji: '😞', label: 'Rough Day' },
+};
+
+function renderHistory() {
+  const checkins = getCheckins();
+  const list = document.getElementById('history-list');
+  const keys = Object.keys(checkins).sort((a,b) => b.localeCompare(a));
+  if (keys.length === 0) { list.innerHTML = '<p class="empty-state">No entries yet — start logging today!</p>'; return; }
+  list.innerHTML = keys.map(key => {
+    const e = checkins[key];
+    const d = parseDate(key);
+    const dateLabel = d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' });
+    const mood = MOOD_DISPLAY[e.mood] || { emoji: '😐', label: e.mood };
+    const symptomsHtml = (e.symptoms||[]).map(s => `<span class="entry-symptom-chip">${s}</span>`).join('');
+    const notesHtml = e.notes ? `<div class="entry-notes">"${e.notes}"</div>` : '';
+    return `<div class="history-entry">
+      <div class="history-entry-header">
+        <span class="entry-date">${dateLabel}</span>
+        <span class="entry-week">Week ${e.week}, Day ${e.dayOfWeek}</span>
+      </div>
+      <div class="entry-mood">${mood.emoji} ${mood.label}</div>
+      ${symptomsHtml ? `<div class="entry-symptoms">${symptomsHtml}</div>` : ''}
+      ${notesHtml}
+    </div>`;
+  }).join('');
+}
+
+function showSettings() {
+  const cfg = getConfig();
+  if (cfg) {
+    document.getElementById('settings-mom-name').value = cfg.name || '';
+    document.getElementById('settings-lmp').value = cfg.lmp || '';
+    document.getElementById('settings-due').value = cfg.lmp ? formatDateKey(dueFromLmp(parseDate(cfg.lmp))) : '';
+  }
+  document.getElementById('settings-modal').classList.remove('hidden');
+  document.getElementById('settings-lmp').oninput = e => {
+    if (e.target.value) document.getElementById('settings-due').value = formatDateKey(dueFromLmp(parseDate(e.target.value)));
+  };
+  document.getElementById('settings-due').oninput = e => {
+    if (e.target.value) document.getElementById('settings-lmp').value = formatDateKey(lmpFromDue(parseDate(e.target.value)));
+  };
+}
+
+function closeSettings() { document.getElementById('settings-modal').classList.add('hidden'); }
+
+function saveSettings() {
+  const name = document.getElementById('settings-mom-name').value.trim();
+  const lmpVal = document.getElementById('settings-lmp').value;
+  if (!lmpVal) { alert('Please enter an LMP or due date.'); return; }
+  const cfg = { lmp: lmpVal, name: name || 'Mama' };
+  STORE.set('pg_config', cfg);
+  closeSettings();
+  showDashboard(cfg);
+}
+
+function resetApp() {
+  if (!confirm('This will delete all your data including the entire wellness journal. Are you sure?')) return;
+  STORE.del('pg_config');
+  STORE.del('pg_checkins');
+  closeSettings();
+  location.reload();
+}
+</script>
+</body>
+</html>
