@@ -4,48 +4,52 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Tumi's Pregnancy Journey ♥</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div id="app">
+<div id="app">
 
-    <!-- Setup Screen -->
-    <div id="setup-screen" class="screen hidden">
-      <div class="setup-card">
-        <div class="heart-icon">♥</div>
-        <h1>Our Pregnancy Journey</h1>
-        <p class="subtitle">Let's set up your tracker</p>
-        <div class="form-group">
-          <label>First day of last menstrual period (LMP)</label>
-          <input type="date" id="lmp-input" />
-        </div>
-        <div class="form-group">
-          <label>Or enter your due date</label>
-          <input type="date" id="due-date-input" />
-        </div>
-        <p class="hint">Fill in one — we'll calculate the other automatically.</p>
-        <div class="form-group">
-          <label>Mom's name</label>
-          <input type="text" id="mom-name-input" placeholder="e.g. Sarah" />
-        </div>
-        <button class="btn-primary" onclick="saveSetup()">Start Our Journey ♥</button>
+  <!-- ── Setup Screen (shown once) ── -->
+  <div id="setup-screen" class="screen hidden">
+    <div class="setup-card">
+      <div class="heart-icon">♥</div>
+      <h1>Our Pregnancy Journey</h1>
+      <p class="subtitle">Enter your details once — we'll remember everything.</p>
+      <div class="form-group">
+        <label>Mom's name</label>
+        <input type="text" id="mom-name-input" placeholder="e.g. Tumi" />
       </div>
+      <div class="form-group">
+        <label>First day of last menstrual period (LMP)</label>
+        <input type="date" id="lmp-input" />
+      </div>
+      <div class="form-group">
+        <label>Or enter due date instead</label>
+        <input type="date" id="due-date-input" />
+      </div>
+      <p class="hint">Fill in one date — we'll calculate the other.</p>
+      <button class="btn-primary" onclick="saveSetup()">Start Our Journey ♥</button>
     </div>
+  </div>
 
-    <!-- Main Dashboard -->
-    <div id="dashboard" class="screen hidden">
-      <header>
-        <div class="header-content">
-          <div class="header-left">
-            <span class="heart-small">♥</span>
-            <span id="header-name">Our Pregnancy Journey</span>
-          </div>
-          <button class="btn-settings" onclick="showSettings()" title="Settings">⚙</button>
+  <!-- ── Main App ── -->
+  <div id="main-app" class="screen hidden">
+
+    <header>
+      <div class="header-content">
+        <div class="header-left">
+          <span class="heart-small">♥</span>
+          <span id="header-name">Our Journey</span>
         </div>
-      </header>
+        <button class="btn-settings" onclick="showSettings()" title="Settings">⚙</button>
+      </div>
+    </header>
 
+    <!-- Tab: Today -->
+    <div id="tab-today" class="tab-pane">
       <main>
-        <!-- Progress Banner -->
         <section class="progress-banner">
           <div class="week-display">
             <div class="week-number" id="week-number">0</div>
@@ -58,7 +62,6 @@
           <div class="trimester-badge" id="trimester-badge">1st Trimester</div>
         </section>
 
-        <!-- Progress Bar -->
         <section class="progress-section">
           <div class="progress-track">
             <div class="progress-fill" id="progress-fill"></div>
@@ -70,7 +73,6 @@
           </div>
         </section>
 
-        <!-- Key Dates -->
         <section class="dates-row">
           <div class="date-card">
             <div class="date-card-label">Due Date</div>
@@ -86,50 +88,30 @@
           </div>
         </section>
 
-        <!-- Milestone Card -->
-        <section class="milestone-card" id="milestone-card">
+        <section class="milestone-card">
           <div class="milestone-emoji" id="milestone-emoji">🌱</div>
           <div class="milestone-content">
             <h3 id="milestone-title">This week</h3>
-            <p id="milestone-text">Loading milestone…</p>
+            <p id="milestone-text">Loading…</p>
           </div>
         </section>
 
-        <!-- Wellness Check-in -->
         <section class="checkin-section">
           <h2>How are you feeling today?</h2>
           <p class="checkin-sub" id="checkin-date-label">Log today's wellness</p>
 
           <div class="mood-grid">
-            <button class="mood-btn" data-mood="great" onclick="selectMood(this)">
-              <span class="mood-emoji">😄</span>
-              <span>Great</span>
-            </button>
-            <button class="mood-btn" data-mood="good" onclick="selectMood(this)">
-              <span class="mood-emoji">🙂</span>
-              <span>Good</span>
-            </button>
-            <button class="mood-btn" data-mood="okay" onclick="selectMood(this)">
-              <span class="mood-emoji">😐</span>
-              <span>Okay</span>
-            </button>
-            <button class="mood-btn" data-mood="tired" onclick="selectMood(this)">
-              <span class="mood-emoji">😴</span>
-              <span>Tired</span>
-            </button>
-            <button class="mood-btn" data-mood="nauseous" onclick="selectMood(this)">
-              <span class="mood-emoji">🤢</span>
-              <span>Nauseous</span>
-            </button>
-            <button class="mood-btn" data-mood="rough" onclick="selectMood(this)">
-              <span class="mood-emoji">😞</span>
-              <span>Rough Day</span>
-            </button>
+            <button class="mood-btn" data-mood="great"    onclick="selectMood(this)"><span class="mood-emoji">😄</span><span>Great</span></button>
+            <button class="mood-btn" data-mood="good"     onclick="selectMood(this)"><span class="mood-emoji">🙂</span><span>Good</span></button>
+            <button class="mood-btn" data-mood="okay"     onclick="selectMood(this)"><span class="mood-emoji">😐</span><span>Okay</span></button>
+            <button class="mood-btn" data-mood="tired"    onclick="selectMood(this)"><span class="mood-emoji">😴</span><span>Tired</span></button>
+            <button class="mood-btn" data-mood="nauseous" onclick="selectMood(this)"><span class="mood-emoji">🤢</span><span>Nauseous</span></button>
+            <button class="mood-btn" data-mood="rough"    onclick="selectMood(this)"><span class="mood-emoji">😞</span><span>Rough Day</span></button>
           </div>
 
           <div class="symptom-section">
-            <label class="symptom-label">Any symptoms today? (select all that apply)</label>
-            <div class="symptom-chips" id="symptom-chips">
+            <label class="symptom-label">Symptoms today (select all that apply)</label>
+            <div class="symptom-chips">
               <button class="chip" onclick="toggleChip(this)">Morning sickness</button>
               <button class="chip" onclick="toggleChip(this)">Fatigue</button>
               <button class="chip" onclick="toggleChip(this)">Heartburn</button>
@@ -151,43 +133,118 @@
           <button class="btn-primary btn-save" onclick="saveCheckin()">Save Today's Entry ♥</button>
           <div id="save-feedback" class="save-feedback hidden">Entry saved! ✓</div>
         </section>
-
-        <!-- History -->
-        <section class="history-section">
-          <h2>Wellness Journal</h2>
-          <div id="history-list" class="history-list">
-            <p class="empty-state">No entries yet — start logging today!</p>
-          </div>
-        </section>
       </main>
     </div>
 
-    <!-- Settings Modal -->
-    <div id="settings-modal" class="modal hidden">
-      <div class="modal-card">
-        <h2>Settings</h2>
-        <div class="form-group">
-          <label>Mom's name</label>
-          <input type="text" id="settings-mom-name" />
+    <!-- Tab: Memories -->
+    <div id="tab-memories" class="tab-pane hidden">
+      <main>
+        <div class="memories-header">
+          <h2>The First 18 Weeks</h2>
+          <p>Answer at your own pace — your answers are saved automatically as you go. These memories will power the summaries for your ObGyn and loved ones.</p>
         </div>
-        <div class="form-group">
-          <label>First day of LMP</label>
-          <input type="date" id="settings-lmp" />
-        </div>
-        <div class="form-group">
-          <label>Due date</label>
-          <input type="date" id="settings-due" />
-        </div>
-        <div class="modal-actions">
-          <button class="btn-secondary" onclick="closeSettings()">Cancel</button>
-          <button class="btn-primary" onclick="saveSettings()">Save Changes</button>
-        </div>
-        <button class="btn-danger" onclick="resetApp()">Reset All Data</button>
-      </div>
+        <div id="retro-form"></div>
+        <button class="btn-primary btn-save-retro" onclick="saveRetro()">Save Memories ♥</button>
+        <div id="retro-feedback" class="save-feedback hidden">Memories saved! ✓</div>
+      </main>
     </div>
 
+    <!-- Tab: Summaries -->
+    <div id="tab-summaries" class="tab-pane hidden">
+      <main>
+        <div class="summary-intro">
+          <h2>Your Story, Two Ways</h2>
+          <p>Generated from your daily logs and memories. Tap the copy button to share.</p>
+        </div>
+
+        <div class="summary-card">
+          <div class="summary-card-header">
+            <div class="summary-icon">🩺</div>
+            <div>
+              <h3>What We Tell the ObGyn</h3>
+              <p class="summary-desc">Clinical, accurate, complete</p>
+            </div>
+          </div>
+          <div class="summary-body" id="obgyn-summary">Tap "Refresh" to generate.</div>
+          <div class="summary-actions">
+            <button class="btn-refresh" onclick="renderSummaries()">↻ Refresh</button>
+            <button class="btn-copy" onclick="copyText('obgyn-summary')">Copy ↗</button>
+          </div>
+        </div>
+
+        <div class="summary-card">
+          <div class="summary-card-header">
+            <div class="summary-icon">💛</div>
+            <div>
+              <h3>What We Tell Friends &amp; Family</h3>
+              <p class="summary-desc">Warm, personal, shareable</p>
+            </div>
+          </div>
+          <div class="summary-body" id="family-summary">Tap "Refresh" to generate.</div>
+          <div class="summary-actions">
+            <button class="btn-refresh" onclick="renderSummaries()">↻ Refresh</button>
+            <button class="btn-copy" onclick="copyText('family-summary')">Copy ↗</button>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <!-- Tab: Journal -->
+    <div id="tab-journal" class="tab-pane hidden">
+      <main>
+        <div class="journal-header">
+          <h2>Wellness Journal</h2>
+          <p>Your daily check-ins, newest first.</p>
+        </div>
+        <div id="history-list" class="history-list">
+          <p class="empty-state">No entries yet — start logging today!</p>
+        </div>
+      </main>
+    </div>
+
+    <!-- Bottom Nav -->
+    <nav class="bottom-nav">
+      <button class="nav-btn active" id="nav-today"     onclick="showTab('today')">
+        <span class="nav-icon">🏠</span><span>Today</span>
+      </button>
+      <button class="nav-btn" id="nav-memories"  onclick="showTab('memories')">
+        <span class="nav-icon">💭</span><span>Memories</span>
+      </button>
+      <button class="nav-btn" id="nav-summaries" onclick="showTab('summaries')">
+        <span class="nav-icon">📋</span><span>Summaries</span>
+      </button>
+      <button class="nav-btn" id="nav-journal"   onclick="showTab('journal')">
+        <span class="nav-icon">📓</span><span>Journal</span>
+      </button>
+    </nav>
+
+  </div><!-- /main-app -->
+
+  <!-- Settings Modal -->
+  <div id="settings-modal" class="modal hidden">
+    <div class="modal-card">
+      <h2>Settings</h2>
+      <div class="form-group">
+        <label>Mom's name</label>
+        <input type="text" id="settings-mom-name" />
+      </div>
+      <div class="form-group">
+        <label>First day of LMP</label>
+        <input type="date" id="settings-lmp" />
+      </div>
+      <div class="form-group">
+        <label>Due date</label>
+        <input type="date" id="settings-due" />
+      </div>
+      <div class="modal-actions">
+        <button class="btn-secondary" onclick="closeSettings()">Cancel</button>
+        <button class="btn-primary" onclick="saveSettings()">Save</button>
+      </div>
+      <button class="btn-danger" onclick="resetApp()">Reset All Data</button>
+    </div>
   </div>
 
-  <script src="app.js"></script>
+</div><!-- /app -->
+<script src="app.js"></script>
 </body>
 </html>
